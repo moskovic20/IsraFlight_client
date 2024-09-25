@@ -12,7 +12,7 @@ class Flight:
         self.arrival_country = arrival_country
         self.departure_date_time = departure_date_time
         self.arrival_date_time = arrival_date_time
-        self.price = price  # הוספת שדה המחיר
+        self.price = price  
         self.is_sabbath_landing = is_sabbath_landing
         self.available_seats = available_seats
 
