@@ -19,4 +19,4 @@ class Flight:
     def __repr__(self):
         return (f"Flight(ID={self.flight_id}, AirplaneID={self.airplane_id}, Departure='{self.departure_city}', "
                 f"Arrival='{self.arrival_city}', DepartureTime={self.departure_date_time}, "
-                f"ArrivalTime={self.arrival_date_time}, Price=${self.price})")  # הצגת המחיר ב-__repr__
+                f"ArrivalTime={self.arrival_date_time}, Price=${self.price})")  
