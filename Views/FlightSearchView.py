@@ -142,19 +142,21 @@ class FlightSearchView(QWidget):
 
                 self.flights_table.setItem(row, 5, QTableWidgetItem(f"$ {flight.price}"))
 
-                # Book Button (currently disabled)
-                book_button = QPushButton('Book')
-                book_button.setEnabled(False)  # Disabled for now
+                # Book Button
+                book_button = QPushButton('Details')
+                book_button.setEnabled(True)
                 book_button.setStyleSheet("""
                     QPushButton {
-                    padding: 1px 2px;  /* מרווח פנימי מסביב לטקסט */
-                        font-size: 11px;     /* גודל הפונט */
-                    background-color: #28a745;  /* צבע ירוק */
-                    color: white;
-                    font-weight: bold;
-                    border-radius: 5px;
-                                       }
-                        """)
+                        padding: 5px 10px;
+                        font-size: 11px;
+                        background-color: #28a745;
+                        color: white;
+                        font-weight: bold;
+                        border-radius: 5px;
+                    }
+                """)
+                # חיבור הכפתור לפונקציה שתפתח את חלון פרטי הטיסה
+                book_button.clicked.connect(lambda checked, f=flight: self.open_flight_details(f))
                 self.flights_table.setCellWidget(row, 6, book_button)
 
             # Adjust column sizes after populating the table
@@ -173,6 +175,13 @@ class FlightSearchView(QWidget):
         # Ensure the table stretches properly across the entire width
         self.flights_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    def on_book_clicked(self, flight_id):
+    #def on_book_clicked(self, flight_id):
         # Handle the booking logic
-        print(f"Booking flight with ID: {flight_id}")
+        #print(f"Booking flight with ID: {flight_id}")
+
+    def open_flight_details(self, flight):
+        from Views.FlightDetailsWindow import FlightDetailsWindow  #לנסות קודם ככה אם הכל תקין להעלות את זה לראש הקובץ ולראות מה קורה
+        # יצירת חלון פרטי טיסה
+        flight_details_window = FlightDetailsWindow(flight)
+        flight_details_window.show()  # הצגת החלון
+
