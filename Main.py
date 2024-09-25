@@ -10,4 +10,5 @@ if __name__ == "__main__":
     
     main_controller.show_home_window()
     
+    #start run
     sys.exit(app.exec())
