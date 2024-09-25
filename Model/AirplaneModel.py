@@ -38,7 +38,7 @@ class AirplaneModel:
                 seat_count=airplane_data.get('seatCount', 0)
             )
         except requests.exceptions.RequestException as e:
-            raise Exception(f"שגיאה בקבלת מטוס לפי ID: {str(e)}")
+            raise Exception(f"error: {str(e)}")
 
     def create_airplane(self, new_airplane):
         
@@ -46,13 +46,12 @@ class AirplaneModel:
             response = requests.post(self.base_url, json=new_airplane)
             response.raise_for_status()
             airplane_data = response.json()
-            return Airplane(
-                airplane_id=airplane_data['airplaneId'],  # קבלת ה-ID מהשרת לאחר יצירה
-                manufacturer=airplane_data['manufacturer'],
-                nickname=airplane_data['nickname'],
-                year_of_manufacture=airplane_data['yearOfManufacture'],
-                image_url=airplane_data.get('imageUrl'),
-                seat_count=airplane_data.get('seatCount', 0)
-            )
+            return airplane_data['airplaneId']
+        
+        except requests.exceptions.HTTPError:
+        # מחזירים את התוכן של התגובה ישירות (למשל, "The image is not airplane.")
+            return response.text
+    
         except requests.exceptions.RequestException as e:
-            raise Exception(f"שגיאה ביצירת מטוס חדש: {str(e)}")
+            return str(e)
+
