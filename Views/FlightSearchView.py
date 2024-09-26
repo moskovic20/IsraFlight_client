@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QAbstractItemView, QHeaderView
 from PySide6.QtCore import Qt
 from datetime import datetime
+from Controllers.FlightDetailsController import FlightDetailsController
 
 class FlightSearchView(QWidget):
     def __init__(self, controller, parent=None):
@@ -175,13 +176,9 @@ class FlightSearchView(QWidget):
         # Ensure the table stretches properly across the entire width
         self.flights_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    #def on_book_clicked(self, flight_id):
-        # Handle the booking logic
-        #print(f"Booking flight with ID: {flight_id}")
-
+      
     def open_flight_details(self, flight):
-        from Views.FlightDetailsWindow import FlightDetailsWindow  #לנסות קודם ככה אם הכל תקין להעלות את זה לראש הקובץ ולראות מה קורה
-        # יצירת חלון פרטי טיסה
-        flight_details_window = FlightDetailsWindow(flight)
-        flight_details_window.show()  # הצגת החלון
+        flight_details_controller = FlightDetailsController(flight)
+        flight_details_controller.show_window()  
+
 
