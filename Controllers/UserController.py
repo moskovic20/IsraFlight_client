@@ -16,6 +16,9 @@ class UserController:
         self.add_flight_controller=None
         self.personal_controller=None
 
+    def get_customer(self):
+        return self.customer
+
     def get_flight_search_controller(self):
         if not self.flight_search_controller:
             self.flight_search_controller = FlightSearchController(self.flightM)

@@ -47,7 +47,7 @@ class UserWindow(QWidget):
         self.tab_widget = QTabWidget()
 
         # הוספת תצוגת חיפוש הטיסות לטאב "Flights"
-        self.flight_search_view = FlightSearchView(self.controller.get_flight_search_controller())
+        self.flight_search_view = FlightSearchView(self.controller.get_flight_search_controller(),self.controller.get_customer())
         self.tab_widget.addTab(self.flight_search_view, "Flights")
 
         # עמודים נוספים למשתמשים רגילים

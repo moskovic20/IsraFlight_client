@@ -44,12 +44,7 @@ class TicketModel:
         response = requests.post(self.base_url, json=new_ticket)
         if response.status_code == 201:
             ticket_data = response.json()
-            return Ticket(
-                ticket_id=ticket_data['ticketId'],
-                flight_id=ticket_data['flightId'],
-                customer_id=ticket_data['customerId'],
-                purchase_date=ticket_data['purchaseDate']
-            )
+            return "Order confirmed, have a nice flight!"
         else:
             raise Exception(f"Failed to create ticket: {response.status_code}")
 
@@ -59,7 +54,7 @@ class TicketModel:
         if response.status_code == 204:
             return True
         else:
-            raise Exception(f"Failed to delete ticket: {response.status_code}")
+            return f"Failed to delete ticket: {response.status_code}"
             
     # פונקציה חדשה להחזרת כרטיסים לפי customerId
     def get_tickets_by_customer_id(self, customer_id):

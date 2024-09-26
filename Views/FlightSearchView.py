@@ -4,10 +4,11 @@ from datetime import datetime
 from Controllers.FlightDetailsController import FlightDetailsController
 
 class FlightSearchView(QWidget):
-    def __init__(self, controller, parent=None):
+    def __init__(self, controller,customer, parent=None):
         super().__init__(parent)
         self.controller = controller
         self.flight_details_controller = None
+        self.customer=customer
         self.init_ui()
 
     def init_ui(self):
@@ -179,7 +180,7 @@ class FlightSearchView(QWidget):
 
       
     def open_flight_details(self, flight):
-        self.flight_details_controller = FlightDetailsController(flight)
+        self.flight_details_controller = FlightDetailsController(flight,self.customer)
         self.flight_details_controller.show_window()  
 
 

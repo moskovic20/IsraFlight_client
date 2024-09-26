@@ -1,13 +1,20 @@
-from PySide6.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget
+from PySide6.QtWidgets import QMainWindow, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QMessageBox
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
+from Model.Ticket import Ticket
+from datetime import datetime
+
+
+
 
 class FlightDetailsWindow(QMainWindow):
-    def __init__(self, flight, parent=None):
+    def __init__(self, flight,controller, parent=None):
         super().__init__(parent)
-        
+        self.controller=controller
         self.setWindowTitle(" ")
         self.setFixedSize(900, 500)
+        self.flight=flight
+        
 
         # יצירת widget מרכזי עבור החלון
         central_widget = QWidget()
@@ -15,26 +22,31 @@ class FlightDetailsWindow(QMainWindow):
 
         # סגנון כללי של החלון עם תמונת רקע
         self.setStyleSheet("""
-            QMainWindow {
-                background-image: url('Images/flightWindow.png');
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size:  cover;
-            }
-            QLabel {
-                color: white;
-            }
-            QPushButton {
-                background-color: rgba(255, 255, 255, 0.7); 
-                color: #336B79;
-                border-radius: 15px;
-                font-size: 15px; 
-                font-family: "Helvetica";  /* שינוי הפונט ל-Arial */
-                font-weight: bold;  /* הפיכת הכתב למודגש */
-                border: none;  /* ללא מסגרת */
-                padding: 10px 20px;
-            }    
-        """)
+    QMainWindow {
+        background-image: url('Images/flightWindow.png');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    QLabel {
+        color: white;
+    }
+    QPushButton {
+        background-color: rgba(255, 255, 255, 0.7);
+        color: #336B79;
+        border-radius: 15px;
+        font-size: 15px;
+        font-family: "Helvetica";
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+    }
+    QPushButton:hover { /* שינוי הצבע בעת מעבר עם העכבר */
+        background-color: rgba(51, 107, 121, 0.9); /* שינוי צבע הכפתור */
+        color: white; /* שינוי צבע הטקסט */
+    }
+""")
+
 
         # הגדרות גופן לכותרות ולתוכן
         
@@ -51,6 +63,8 @@ class FlightDetailsWindow(QMainWindow):
         # כפתור תשלום - ממוקם בצד ימין למעלה
         payment_button = QPushButton("order now ->")
         payment_button.setFixedSize(205, 40)
+        payment_button.clicked.connect(self.create_ticket)
+
 
         # פרטי ההמראה והנחיתה
         departure_label = QLabel("Takeoff:")
@@ -131,3 +145,22 @@ class FlightDetailsWindow(QMainWindow):
             shabbat_label = QLabel("*This flight does not land on Shabbat")
             shabbat_label.setStyleSheet("color: #FFFFFF; font-style: italic;")
             main_layout.addWidget(shabbat_label, alignment=Qt.AlignCenter)
+
+    def create_ticket(self):
+        try:
+            message = self.controller.create_ticket(self.flight.flight_id, datetime.now().isoformat())
+
+            # הצגת ההודעה בחלון QMessageBox
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Information)
+            msg_box.setText(message)
+            msg_box.setWindowTitle("message")
+            msg_box.exec()
+
+        except Exception as e:
+            # הצגת שגיאה אם הייתה בעיה ביצירת הכרטיס
+            msg_box = QMessageBox()
+            msg_box.setIcon(QMessageBox.Critical)
+            msg_box.setText(f"Failed to create the ticket: {str(e)}")
+            msg_box.setWindowTitle("Error")
+            msg_box.exec()
