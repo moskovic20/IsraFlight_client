@@ -3,6 +3,8 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QTabWidget, QLabel, QHBoxLay
 from PySide6.QtGui import QFont, QPixmap
 from Views.FlightSearchView import FlightSearchView  # ייבוא תצוגת חיפוש הטיסות
 from Views.AddAirplaneView import AddAirplaneView  # ייבוא תצוגת הוספת הטיסות
+from Views.AddFlightView import AddFlightView
+from Views.PersonalAreaView import PersonalAreaView
 import os
 
 
@@ -50,7 +52,8 @@ class UserWindow(QWidget):
 
         # עמודים נוספים למשתמשים רגילים
         personal_area_page = QWidget()
-        self.tab_widget.addTab(personal_area_page, "Personal Area")
+        self.personal_view = PersonalAreaView(self.controller.get_personal_controller())
+        self.tab_widget.addTab( self.personal_view, "Personal Area")
 
         todays_landings_page = QWidget()
         self.tab_widget.addTab(todays_landings_page, "Today's Landings")
@@ -61,8 +64,8 @@ class UserWindow(QWidget):
             self.add_airplane_view = AddAirplaneView(self.controller.get_add_airplane_controller())
             self.tab_widget.addTab(self.add_airplane_view, "Add Airplane")
 
-            add_airplane_page = QWidget()  # ניתן לחבר גם את עמוד הוספת המטוס כאן
-            self.tab_widget.addTab(add_airplane_page, "Add Flight")
+            self.add_airplane_page =AddFlightView(self.controller.get_add_flight_controller())  
+            self.tab_widget.addTab(self.add_airplane_page, "Add Flight")
 
         # הגדרת פריסה
         frame = QFrame()

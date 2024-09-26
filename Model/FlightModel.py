@@ -118,3 +118,42 @@ class FlightModel:
         destinations = list(set(f"{flight.arrival_city}, {flight.arrival_country}" for flight in flights))
         # מיון היעדים לפי סדר האלף-בית
         return sorted(destinations)
+    
+    def add_flight(self, flight_data):
+        response = requests.post(self.base_url, json=flight_data)
+
+        if response.status_code == 201:  # בדיקת הצלחה (201 Created)
+            print("Flight added successfully!")
+            return self._create_flight_from_data(response.json())  
+        elif response.status_code == 400:
+            return "SHABBAT_LANDING_NOT_ALLOWED"
+        else:
+                # טיפול בשגיאות אחרות
+            return f"Failed to add flight:"
+
+    
+
+        # בקשה לקבלת כל מספרי המטוסים
+    def get_all_airplane_ids(self):
+        url = f"{self.base_url}/airplane-ids"
+        response = requests.get(url)
+        if response.status_code == 200:
+            airplane_ids = response.json()  # נניח שהתגובה היא JSON עם רשימת מספרי המטוסים
+            return airplane_ids
+        elif response.status_code == 404:
+            return []
+        else:
+            raise Exception(f"Failed to get airplane IDs: {response.status_code}, {response.text}")
+        
+    # פונקציה לקבלת טיסה לפי מספר טיסה
+    def get_flight_by_id(self, flight_id):
+        url = f"{self.base_url}/{flight_id}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            flight_data = response.json()
+            return self._create_flight_from_data(flight_data)
+        elif response.status_code == 404:
+            print(f"Flight with ID {flight_id} not found.")
+            return None
+        else:
+            raise Exception(f"Failed to get flight by ID: {response.status_code}, {response.text}")

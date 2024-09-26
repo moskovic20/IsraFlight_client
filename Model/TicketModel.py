@@ -1,3 +1,5 @@
+# TicketModel.py
+
 import requests
 from Model.Ticket import Ticket
 
@@ -58,3 +60,21 @@ class TicketModel:
             return True
         else:
             raise Exception(f"Failed to delete ticket: {response.status_code}")
+            
+    # פונקציה חדשה להחזרת כרטיסים לפי customerId
+    def get_tickets_by_customer_id(self, customer_id):
+        url = f"{self.base_url}/customer/{customer_id}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            tickets_data = response.json()
+            tickets = [Ticket(
+                ticket_id=ticket['ticketId'],
+                flight_id=ticket['flightId'],
+                customer_id=ticket['customerId'],
+                purchase_date=ticket['purchaseDate']
+            ) for ticket in tickets_data]
+            return tickets
+        elif response.status_code==404:
+            return []
+        else:
+            raise Exception(f"Failed to get tickets for customer {customer_id}: {response.status_code}")

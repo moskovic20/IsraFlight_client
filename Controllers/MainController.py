@@ -24,7 +24,7 @@ class MainController:
         self.home_controller = HomeController(self)
         self.sing_in_controller = SingInController(self,self.customer_model)
         self.new_account_controller= NewAccountController(self,self.customer_model)
-        self.user_win_controller=UserController(self,self.flight_model,self.airplane_model)
+        self.user_win_controller=UserController(self,self.flight_model,self.airplane_model,self.ticket_model)
 
     #הצגת מסך הבית
     def show_home_window(self):
