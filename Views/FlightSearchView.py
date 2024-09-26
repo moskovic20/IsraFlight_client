@@ -7,6 +7,7 @@ class FlightSearchView(QWidget):
     def __init__(self, controller, parent=None):
         super().__init__(parent)
         self.controller = controller
+        self.flight_details_controller = None
         self.init_ui()
 
     def init_ui(self):
@@ -178,7 +179,7 @@ class FlightSearchView(QWidget):
 
       
     def open_flight_details(self, flight):
-        flight_details_controller = FlightDetailsController(flight)
-        flight_details_controller.show_window()  
+        self.flight_details_controller = FlightDetailsController(flight)
+        self.flight_details_controller.show_window()  
 
 

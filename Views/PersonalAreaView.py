@@ -133,6 +133,35 @@ class PersonalAreaView(QWidget):
         self.tickets_table.verticalHeader().setDefaultSectionSize(row_height)
 
         # הבאת נתוני הכרטיסים מהבקר והצגתם בטבלה
+        self.populate_tickets_table()
+
+        # הוספת הטבלה לפריסה המרכזית
+        table_layout.addWidget(self.tickets_table)
+        main_layout.addLayout(table_layout)
+
+        # כפתור לעדכון הכרטיסים מתחת לטבלה
+        self.update_button = QPushButton("Update")
+        self.update_button.setStyleSheet("""
+            QPushButton {
+                padding: 5px 10px;
+                font-size: 14px;
+                background-color: #17a2b8;
+                color: white;
+                font-weight: bold;
+                border-radius: 5px;
+            }
+            QPushButton:hover {
+                background-color: #138496;
+            }
+        """)
+        self.update_button.clicked.connect(self.populate_tickets_table)  # רענון נתוני הטבלה
+
+        main_layout.addWidget(self.update_button, alignment=Qt.AlignCenter)
+
+        # הגדרת הפריסה לעמוד
+        self.setLayout(main_layout)
+
+    def populate_tickets_table(self):
         tickets = self.controller.get_user_tickets()
 
         if not tickets:
@@ -169,9 +198,8 @@ class PersonalAreaView(QWidget):
                     }
                 """)
                 print_pdf_button.setFixedSize(100, 30)  # קביעת גודל הכפתור
-                # קישור הפונקציה לבקר כך שהכפתור יידע איזה כרטיס לשלוח לשרת
+                # שימוש ב lambda כדי לוודא שהכפתור מקושר לכרטיס הנכון
                 print_pdf_button.clicked.connect(lambda checked, t=ticket: self.controller.printPDF(t))
-
 
                 # יצירת פריסה אופקית למרכוז הכפתור בתא
                 button_layout = QHBoxLayout()
@@ -185,25 +213,3 @@ class PersonalAreaView(QWidget):
 
                 # הוספת הקופסה עם הכפתור לתא
                 self.tickets_table.setCellWidget(row, 3, button_widget)
-
-        # הוספת הטבלה לפריסה המרכזית
-        table_layout.addWidget(self.tickets_table)
-        main_layout.addLayout(table_layout)
-
-        # הגדרת הפריסה לעמוד
-        self.setLayout(main_layout)
-
-    def button_style(self):
-        return """
-        QPushButton {
-            background-color: #28a745;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 10px;
-            padding: 10px;
-        }
-        QPushButton:hover {
-            background-color: #218838;
-        }
-        """
